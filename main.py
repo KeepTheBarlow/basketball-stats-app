@@ -35,7 +35,15 @@ if selected_team:
             "AllTimeWins", "AllTimeWinPct", "ConfChampPostCount", 
             "NCAAAppCount", "NCAAFinalFourCount", "NCAAChampCount"
         ]
-        st.table(team_stats[columns])
+        table_data = team_stats[columns].rename(columns={
+            "AllTimeWins": "All-Time Wins",
+            "AllTimeWinPct": "All-Time Win %",
+            "ConfChampPostCount": "Conference Tournament Championships",
+            "NCAAAppCount": "NCAA Appearances",
+            "NCAAFinalFourCount": "Final Four Appearances",
+            "NCAAChampCount": "Championships"
+        })
+        st.table(table_data)
 
     with tab2:
         st.subheader(f"2023 Season Statistics for {selected_team}")
@@ -44,5 +52,14 @@ if selected_team:
             "Wins2023", "WinPct2023", "FGPct2023", 
             "3PPct2023", "FTPct2023", "TotReb2023", "Assists2023"
         ]
-        st.table(team_stats[columns_2023])
+        table_data_2023 = team_stats[columns_2023].rename(columns={
+            "Wins2023": "2023 Wins",
+            "WinPct2023": "2023 Win %",
+            "FGPct2023": "Field Goal %",
+            "3PPct2023": "Three-Point %",
+            "FTPct2023": "Free Throw %",
+            "TotReb2023": "Total Rebounds",
+            "Assists2023": "Assists"
+        })
+        st.table(table_data_2023)
 
