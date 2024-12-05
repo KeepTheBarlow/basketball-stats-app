@@ -133,4 +133,9 @@ if selected_team:
                 label=f"{selected_team}"
             )
             st.pyplot(fig_scatter)
+        
+        with st.expander("How to use"):
+            st.write('''
+                Choose your x-axis variable and y-axis variable to see the relationship between the two for the whole league. The red dot is the selected team.
+            ''')
 
