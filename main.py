@@ -63,3 +63,32 @@ if selected_team:
         })
         st.table(table_data_2023)
 
+        x_axis = st.selectbox("Select X-axis variable for scatterplot", ["Wins2023", "WinPct2023", "Points2023", "FGPct2023", 
+                                                                         "3PPct2023", "FTPct2023", "TotReb2023", "Assists2023", 
+                                                                         "Steals2023", "Blocks2023", "Turnovers2023"],
+                               index=0)
+        y_axis = st.selectbox("Select Y-axis variable for scatterplot", ["Wins2023", "WinPct2023", "Points2023", "FGPct2023", 
+                                                                         "3PPct2023", "FTPct2023", "TotReb2023", "Assists2023", 
+                                                                         "Steals2023", "Blocks2023", "Turnovers2023"],
+                               index=1)
+        if x_axis and y_axis:
+        
+            fig, ax = plt.subplots()
+
+            ax.scatter(
+                basketball_df[x_axis],
+                basketball_df[y_axis],
+                color="blue",
+                label="All Teams"
+            )
+            
+            team_data = basketball_df[basketball_df['School'] == selected_team]
+            ax.scatter(
+                team_data[x_axis],
+                team_data[y_axis],
+                color="red",
+                s=100,
+                label=f"{selected_team}"
+            )
+            st.pyplot(fig)
+
