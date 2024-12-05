@@ -77,6 +77,14 @@ if selected_team:
                 bar_width,
                 color="green"
             )
+        
+        ax.set_xlabel("Teams")
+        ax.set_ylabel("Championship Counts")
+        ax.set_title("Top 10 Teams by National Championships (+ Selected Team)")
+        ax.set_xticks(indices)
+        ax.set_xticklabels(x_labels, rotation=45, ha="right")
+        ax.legend()
+
         st.pyplot(fig_chips)
 
     with tab2:
