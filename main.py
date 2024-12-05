@@ -45,6 +45,40 @@ if selected_team:
         })
         st.table(table_data)
 
+        st.subheader("Top 10 Teams by National Championships")
+
+        top_10_teams = basketball_df.nlargest(10, 'NCAAChampCount')[['School', 'NCAAChampCount', 'ConfChampPostCount']]
+
+        if selected_team and selected_team not in top_10_teams['School'].values:
+            selected_team_data = basketball_df[basketball_df['School'] == selected_team][['School', 'NCAAChampCount', 'ConfChampPostCount']]
+            top_10_teams = pd.concat([top_10_teams, selected_team_data], ignore_index=True)
+        
+        top_10_teams = top_10_teams.sort_values(by='NCAAChampCount', ascending=False).reset_index(drop=True)
+
+        x_labels = top_10_teams['School']
+        bar_width = 0.35
+        fig_chips, ax = plt.subplots(figsize=(10, 6))
+
+        indices = np.arange(len(x_labels))
+        ax.bar(indices - bar_width/2, top_10_teams['NCAAChampCount'], bar_width, label="National Championships", color="blue")
+        ax.bar(indices + bar_width/2, top_10_teams['ConfChampPostCount'], bar_width, label="Conference Championships", color="orange")
+
+        if selected_team and selected_team not in basketball_df.nlargest(10, 'NCAAChampCount')['School'].values:
+            ax.bar(
+                [len(top_10_teams) - 1 - bar_width/2],
+                [top_10_teams.iloc[-1]['NCAAChampCount']],
+                bar_width,
+                color="green",
+                label=f"{selected_team} (Selected)"
+            )
+            ax.bar(
+                [len(top_10_teams) - 1 + bar_width/2],
+                [top_10_teams.iloc[-1]['ConfChampPostCount']],
+                bar_width,
+                color="green"
+            )
+        st.pyplot(fig_chips)
+
     with tab2:
         st.subheader(f"2023 Season Statistics for {selected_team}")
 
@@ -73,7 +107,7 @@ if selected_team:
                                index=1)
         if x_axis and y_axis:
         
-            fig, ax = plt.subplots()
+            fig_scatter, ax = plt.subplots()
 
             ax.scatter(
                 basketball_df[x_axis],
@@ -90,5 +124,5 @@ if selected_team:
                 s=100,
                 label=f"{selected_team}"
             )
-            st.pyplot(fig)
+            st.pyplot(fig_scatter)
 
