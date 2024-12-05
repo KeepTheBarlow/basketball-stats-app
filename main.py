@@ -23,7 +23,7 @@ with st.sidebar:
     else:
         st.write("Start typing to search for a team")
 
-tab1, tab2 = st.tabs(['Single Team All Time', 'Single Team 2023'])
+tab1, tab2, tab3 = st.tabs(['Single Team All Time', 'Single Team 2023', 'Interesting Graphs'])
 
 if selected_team:
     team_stats = basketball_df[basketball_df['School'] == selected_team]
@@ -138,4 +138,73 @@ if selected_team:
             st.write('''
                 Choose your x-axis variable and y-axis variable to see the relationship between the two for the whole league. The red dot is the selected team.
             ''')
+    
+    with tab3:
+        st.subheader("Relationship between Tournament Appearances and Win % (2023)")
+
+        fig_apps, ax = plt.subplots(figsize=(10, 6))
+        sns.regplot(data=basketball_df, x='NCAAAppCount', y='WinPct2023', ax=ax)
+
+        ax.set_xlabel("Number of NCAA Tournament Appearances All Time")
+        ax.set_ylabel("Win Percentage (2023)")
+        ax.set_title("Relationship between Tournament Appearances and Win % (2023)")
+
+        st.pyplot(fig_apps)
+
+        st.subheader("Relationship between Offensive Rebounds and FG% vs 3P FG% (2023)")
+
+        fig_shooting, ax = plt.subplots(figsize=(10, 6))
+        
+        sns.scatterplot(
+            data=basketball_df, 
+            x='OffReb2023', 
+            y='FGPct2023', 
+            color='blue', 
+            label='FG%', 
+            s=50, 
+            ax=ax
+        )
+        
+        sns.scatterplot(
+            data=basketball_df, 
+            x='OffReb2023', 
+            y='3PPct2023', 
+            color='red', 
+            label='3P%', 
+            s=50, 
+            ax=ax
+        )
+        
+        ax.set_xlabel("Number of Offensive Rebounds")
+        ax.set_ylabel("Field Goal Percentage (2023)")
+        ax.set_title("Relationship between Offensive Rebounds and FG% vs 3P FG%")
+        ax.legend()
+
+        st.pyplot(fig_shooting)
+
+        both_chips_df = basketball_df[(basketball_df['ConfChampPostCount'] > 0) & (basketball_df['NCAAChampCount'] > 0)]
+
+        teams = both_chips_df['School']
+        conference_champs = both_chips_df['RegSeasonConfChampCount']
+        national_champs = both_chips_df['NCAAChampCount']
+
+        bar_width = 0.35
+        index = np.arange(len(teams))
+
+        
+        st.subheader("Conference and National Championships for Teams with Both Titles")
+
+        fig, ax = plt.subplots(figsize=(14, 8))
+
+        bar1 = ax.bar(index, conference_champs, bar_width, label='Conference Championships', color='blue')
+        bar2 = ax.bar(index + bar_width, national_champs, bar_width, label='National Championships', color='gold')
+
+        ax.set_xlabel('Teams')
+        ax.set_ylabel('Number of Championships')
+        ax.set_title('Conference and National Championships for Teams with Both Titles')
+        ax.set_xticks(index + bar_width / 2)
+        ax.set_xticklabels(teams, rotation=90)
+        ax.legend()
+
+        st.pyplot(fig)
 
