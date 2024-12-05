@@ -132,6 +132,11 @@ if selected_team:
                 s=100,
                 label=f"{selected_team}"
             )
+
+            ax.set_xlabel(x_axis)
+            ax.set_ylabel(y_axis)
+            ax.set_title(f"{x_axis} vs {y_axis} (2023 Season)")
+            ax.legend()
             st.pyplot(fig_scatter)
         
         with st.expander("How to use"):
